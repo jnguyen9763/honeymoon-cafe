@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PickupDisplay from "../components/PickupDisplay";
 import React from "react";
 import logo from "../assets/logo.png";
@@ -17,6 +18,11 @@ const Divider = styled.div`
 `;
 
 const Logo = styled.img`
+  height: 100%;
+  width: 100%;
+`;
+
+const LogoLink = styled(Link)`
   max-height: 25%;
   max-width: 100%;
 `;
@@ -32,7 +38,9 @@ const TableContainer = styled.div`
 const PickupScreen = () => {
   return (
     <Container>
-      <Logo src={logo} />
+      <LogoLink to="/">
+        <Logo src={logo} />
+      </LogoLink>
       <TableContainer>
         <PickupDisplay
           heading="IN PROGRESS"

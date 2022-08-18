@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React from "react";
 import logo from "../assets/logo.png";
 import styled from "styled-components";
@@ -9,6 +10,7 @@ const ComponentContainer = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   min-height: 100%;
 `;
 
@@ -27,7 +29,9 @@ const withNavbar = (Component) => {
   return (props) => (
     <Container>
       <Navbar>
-        <Logo src={logo} />
+        <Link to="/">
+          <Logo src={logo} />
+        </Link>
       </Navbar>
       <ComponentContainer>
         <Component {...props} />
