@@ -1,6 +1,6 @@
 import PickupDisplay from "../components/PickupDisplay";
 import React from "react";
-import pickupScreenLogo from "../assets/pickup-logo.png";
+import logo from "../assets/logo.png";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -32,7 +32,7 @@ const TableContainer = styled.div`
 const PickupScreen = () => {
   return (
     <Container>
-      <Logo src={pickupScreenLogo} />
+      <Logo src={logo} />
       <TableContainer>
         <PickupDisplay
           heading="IN PROGRESS"
