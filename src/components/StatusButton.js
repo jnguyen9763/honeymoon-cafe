@@ -8,7 +8,7 @@ const BUTTONS = Object.freeze({
   [STATUSES.COMPLETED]: { color: "dark", text: "Picked up" },
 });
 
-const StatusButton = ({ status }) => {
+const StatusButton = ({ status, onClick }) => {
   const buttonProps = BUTTONS[status];
 
   if (!buttonProps) {
@@ -16,7 +16,7 @@ const StatusButton = ({ status }) => {
   }
 
   return (
-    <Button color={buttonProps.color} size="sm" block>
+    <Button color={buttonProps.color} size="sm" block onClick={onClick}>
       {buttonProps.text}
     </Button>
   );

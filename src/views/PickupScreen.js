@@ -1,8 +1,10 @@
+import { STATUSES } from "../constants/statuses";
 import { Link } from "react-router-dom";
 import PickupDisplay from "../components/PickupDisplay";
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import styled from "styled-components";
+import FirestoreContext from "../states/FirestoreContext";
 
 const Container = styled.div`
   align-items: center;
@@ -36,6 +38,16 @@ const TableContainer = styled.div`
 `;
 
 const PickupScreen = () => {
+  const { orders } = useContext(FirestoreContext);
+
+  const inProgressOrderNumbers = orders
+    .filter(({ status }) => status === STATUSES.IN_PROGRESS)
+    .map(({ orderNumber }) => orderNumber);
+
+  const pickupOrderNumbers = orders
+    .filter(({ status }) => status === STATUSES.COMPLETED)
+    .map(({ orderNumber }) => orderNumber);
+
   return (
     <Container>
       <LogoLink to="/">
@@ -44,12 +56,13 @@ const PickupScreen = () => {
       <TableContainer>
         <PickupDisplay
           heading="IN PROGRESS"
-          orderNumbers={[
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-          ]}
+          orderNumbers={inProgressOrderNumbers}
         />
         <Divider />
-        <PickupDisplay heading="READY FOR PICK-UP" />
+        <PickupDisplay
+          heading="READY FOR PICK-UP"
+          orderNumbers={pickupOrderNumbers}
+        />
       </TableContainer>
     </Container>
   );

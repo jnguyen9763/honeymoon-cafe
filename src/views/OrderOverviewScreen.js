@@ -1,7 +1,18 @@
 import { STATUSES } from "../constants/statuses";
-import React from "react";
-import withNavbar from "../hocs/withNavbar";
+import FirestoreContext from "../states/FirestoreContext";
 import OrderSection from "../components/OrderSection";
+import React, { useContext } from "react";
+import styled from "styled-components";
+import withNavbar from "../hocs/withNavbar";
+
+const EmptyStateContainer = styled.div`
+  align-items: center;
+  display: flex;
+  font-size: 25px;
+  font-weight: bold;
+  height: 100%;
+  justify-content: center;
+`;
 
 const SECTIONS = [
   { header: "New Orders", status: STATUSES.NEW },
@@ -12,77 +23,11 @@ const SECTIONS = [
 ];
 
 const OrderOverviewScreen = () => {
-  // might have to sort by order number
-  const orders = [
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-        { name: "Super loonngggggg nameeee", quantity: 2 },
-      ],
-      orderNumber: 1,
-      notes: "notes",
-      status: "PICKED_UP",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 2,
-      status: "IN_PROGRESS",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 3,
-      status: "COMPLETED",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 4,
-      notes: "notes",
-      status: "CANCELED",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 4,
-      status: "PICKED_UP",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 4,
-      status: "NEW",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 4,
-      status: "PICKED_UP",
-    },
-    {
-      items: [
-        { name: "Drink #1", quantity: 2 },
-        { name: "Drink #2", quantity: 2 },
-      ],
-      orderNumber: 4,
-      status: "CANCELED",
-    },
-  ];
+  const { orders = [] } = useContext(FirestoreContext);
+
+  if (!orders.length) {
+    return <EmptyStateContainer>No orders yet</EmptyStateContainer>;
+  }
 
   return (
     <div>

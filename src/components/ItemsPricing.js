@@ -26,7 +26,7 @@ const Row = styled.div`
   height: 35px;
 `;
 
-const ItemsPricing = ({ customerAmount, setCustomerAmount, total }) => {
+const ItemsPricing = ({ change, customerAmount, setCustomerAmount, total }) => {
   const onBlur = () => {
     if (customerAmount && !isNaN(customerAmount)) {
       setCustomerAmount(parseFloat(customerAmount).toFixed(2));
@@ -40,8 +40,6 @@ const ItemsPricing = ({ customerAmount, setCustomerAmount, total }) => {
       setCustomerAmount(value);
     }
   };
-
-  const change = customerAmount ? (customerAmount - total).toFixed(2) : "0.00";
 
   return (
     <Container>

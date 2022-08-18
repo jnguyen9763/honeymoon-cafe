@@ -1,3 +1,4 @@
+import { PAYMENT_METHODS } from "../constants/paymentMethods";
 import {
   Button,
   Input,
@@ -6,10 +7,11 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import FirestoreContext from "../states/FirestoreContext";
 import ItemList from "../components/ItemList";
 import ItemMaker from "../components/ItemMaker";
 import ItemsPricing from "../components/ItemsPricing";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import withNavbar from "../hocs/withNavbar";
 import styled from "styled-components";
 
@@ -46,12 +48,25 @@ const getTotal = (items) => {
 };
 
 const TakeOrderScreen = () => {
+  const { createOrder, orderNumber } = useContext(FirestoreContext);
   const [customerAmount, setCustomerAmount] = useState("");
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const totalAmount = getTotal(items);
 
   const toggle = () => setOpenModal(!openModal);
+
+  const onResetOrderState = () => {
+    setCustomerAmount("");
+    setNotes("");
+    setItems({});
+  };
+
+  const onCreateOrder = (paymentMethod) => {
+    createOrder({ items, notes, paymentMethod, totalAmount });
+    onResetOrderState();
+  };
 
   const onUpdateItem = ({ item, price, quantity }) => {
     const existingQuantity = items[item]?.quantity || 0;
@@ -73,14 +88,17 @@ const TakeOrderScreen = () => {
   };
 
   const onResetOrder = () => {
+    onResetOrderState();
     toggle();
-    setItems({});
-    setCustomerAmount("");
   };
+
+  const change = customerAmount ? customerAmount - totalAmount : 0;
+  const disablePaymentButtons =
+    !customerAmount || change < 0 || totalAmount == 0;
 
   return (
     <Container>
-      <h1>Order #1</h1>
+      <h1>Order #{orderNumber}</h1>
       <ItemMaker onUpdateItem={onUpdateItem} />
       <ItemList items={items} onUpdateItem={onUpdateItem} />
       <NotesInput
@@ -90,14 +108,27 @@ const TakeOrderScreen = () => {
         onChange={(evt) => setNotes(evt.target.value)}
       />
       <ItemsPricing
+        change={change.toFixed(2)}
         customerAmount={customerAmount}
         setCustomerAmount={setCustomerAmount}
-        total={getTotal(items)}
+        total={totalAmount}
       />
       <ButtonGroup>
-        <Button color="success">Paid Cash</Button>
+        <Button
+          color="success"
+          disabled={disablePaymentButtons}
+          onClick={() => onCreateOrder(PAYMENT_METHODS.CASH)}
+        >
+          Paid Cash
+        </Button>
         <div />
-        <Button color="primary">Paid Venmo</Button>
+        <Button
+          color="primary"
+          disabled={disablePaymentButtons}
+          onClick={() => onCreateOrder(PAYMENT_METHODS.VENMO)}
+        >
+          Paid Venmo
+        </Button>
       </ButtonGroup>
       <Button color="danger" block onClick={toggle}>
         Reset order

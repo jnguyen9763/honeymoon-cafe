@@ -1,6 +1,7 @@
 import { STATUSES } from "../constants/statuses";
 import { Button, Card, CardBody, CardText, CardTitle, List } from "reactstrap";
-import React from "react";
+import FirestoreContext from "../states/FirestoreContext";
+import React, { useContext } from "react";
 import StatusBadge from "./StatusBadge";
 import styled from "styled-components";
 import StatusButton from "./StatusButton";
@@ -42,7 +43,40 @@ const UndoButton = styled(Button)`
 `;
 
 const OrderCard = ({ order }) => {
-  const { items = [], notes, orderNumber, status } = order;
+  const { updateOrderStatus } = useContext(FirestoreContext);
+  const { id, items = [], notes, orderNumber, status } = order;
+
+  const onProgressOrder = () => {
+    switch (status) {
+      case STATUSES.NEW:
+        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        return;
+      case STATUSES.IN_PROGRESS:
+        updateOrderStatus(id, STATUSES.COMPLETED);
+        return;
+      case STATUSES.COMPLETED:
+        updateOrderStatus(id, STATUSES.PICKED_UP);
+        return;
+      default:
+        return;
+    }
+  };
+
+  const onUndoProgress = () => {
+    switch (status) {
+      case STATUSES.IN_PROGRESS:
+        updateOrderStatus(id, STATUSES.NEW);
+        return;
+      case STATUSES.COMPLETED:
+        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        return;
+      case STATUSES.PICKED_UP:
+        updateOrderStatus(id, STATUSES.COMPLETED);
+        return;
+      default:
+        return;
+    }
+  };
 
   return (
     <Container>
@@ -71,9 +105,9 @@ const OrderCard = ({ order }) => {
           </div>
           {status !== STATUSES.CANCELED && (
             <div>
-              <StatusButton status={status} />
+              <StatusButton status={status} onClick={onProgressOrder} />
               {status !== STATUSES.NEW && (
-                <UndoButton size="sm" block>
+                <UndoButton size="sm" block onClick={onUndoProgress}>
                   Undo
                 </UndoButton>
               )}
