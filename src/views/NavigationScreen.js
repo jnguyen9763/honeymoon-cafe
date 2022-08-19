@@ -26,7 +26,7 @@ const LINKS = [
   { text: "Take order", path: "/take-order" },
   { text: "Order overview", path: "/order-overview" },
   { text: "Pickup status", path: "/pickup" },
-  { text: "Dashboard", path: "/" },
+  { text: "Dashboard", path: "/dashboard" },
 ];
 
 const NavigationScreen = () => {
