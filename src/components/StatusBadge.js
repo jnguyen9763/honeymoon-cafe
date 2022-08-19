@@ -17,7 +17,11 @@ const StatusBadge = ({ status }) => {
     return null;
   }
 
-  return <Badge color={badgeProps.color}>{badgeProps.text}</Badge>;
+  return (
+    <Badge color={badgeProps.color} tag="h6">
+      {badgeProps.text}
+    </Badge>
+  );
 };
 
 export default StatusBadge;
