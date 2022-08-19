@@ -7,7 +7,7 @@ const AlertContainer = styled.div`
   left: 50%;
   max-width: 90%;
   position: fixed;
-  top: 30px;
+  top: 15px;
   transform: translateX(-50%);
 `;
 

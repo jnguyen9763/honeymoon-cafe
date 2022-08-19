@@ -1,9 +1,9 @@
 import { PAYMENT_METHODS } from "../constants/paymentMethods";
 import { STATUSES } from "../constants/statuses";
 
-const getDrinkCount = (items, { drinkName }) => {
+const getItemCount = (items, { itemName }) => {
   return items.reduce((acc, { name }) => {
-    if (name.includes(drinkName)) {
+    if (name.includes(itemName)) {
       return acc + 1;
     }
 
@@ -43,12 +43,12 @@ export const getItemsCount = (orders, getItemsCountFunc, options) => {
 };
 
 // TODO: clean this up and update
-export const getPieChartDatas = (orders) => {
+export const getPieChartDatas = (allOrders, processedOrders) => {
   const paymentMethodData = [
     {
       title: "Cash",
       value: getPieChartValue(
-        orders,
+        processedOrders,
         (order) => order.paymentMethod === PAYMENT_METHODS.CASH
       ),
       color: "#2ECC71",
@@ -56,7 +56,7 @@ export const getPieChartDatas = (orders) => {
     {
       title: "Venmo",
       value: getPieChartValue(
-        orders,
+        processedOrders,
         (order) => order.paymentMethod === PAYMENT_METHODS.VENMO
       ),
       color: "#3498DB",
@@ -66,13 +66,16 @@ export const getPieChartDatas = (orders) => {
   const statusData = [
     {
       title: "New",
-      value: getPieChartValue(orders, (order) => order.status === STATUSES.NEW),
+      value: getPieChartValue(
+        allOrders,
+        (order) => order.status === STATUSES.NEW
+      ),
       color: "#5DADE2",
     },
     {
       title: "In Progress",
       value: getPieChartValue(
-        orders,
+        allOrders,
         (order) => order.status === STATUSES.IN_PROGRESS
       ),
       color: "#F4D03F",
@@ -80,7 +83,7 @@ export const getPieChartDatas = (orders) => {
     {
       title: "Completed",
       value: getPieChartValue(
-        orders,
+        allOrders,
         (order) => order.status === STATUSES.COMPLETED
       ),
       color: "#52BE80",
@@ -88,7 +91,7 @@ export const getPieChartDatas = (orders) => {
     {
       title: "Picked-up",
       value: getPieChartValue(
-        orders,
+        allOrders,
         (order) => order.status === STATUSES.PICKED_UP
       ),
       color: "#CACFD2",
@@ -96,35 +99,48 @@ export const getPieChartDatas = (orders) => {
     {
       title: "Canceled",
       value: getPieChartValue(
-        orders,
+        allOrders,
         (order) => order.status === STATUSES.CANCELED
       ),
       color: "#EC7063",
     },
   ];
 
-  const drinkData = [
+  const itemsData = [
     {
       title: "Drink #1",
-      value: getItemsCount(orders, getDrinkCount, { drinkName: "Drink #1" }),
+      value: getItemsCount(processedOrders, getItemCount, {
+        itemName: "Drink #1",
+      }),
       color: "#E74C3C",
     },
     {
       title: "Drink #2",
-      value: getItemsCount(orders, getDrinkCount, { drinkName: "Drink #2" }),
+      value: getItemsCount(processedOrders, getItemCount, {
+        itemName: "Drink #2",
+      }),
       color: "#F1C40F",
     },
     {
       title: "Drink #3",
-      value: getItemsCount(orders, getDrinkCount, { drinkName: "Drink #3" }),
+      value: getItemsCount(processedOrders, getItemCount, {
+        itemName: "Drink #3",
+      }),
       color: "#3498DB",
+    },
+    {
+      title: "Food #1",
+      value: getItemsCount(processedOrders, getItemCount, {
+        itemName: "Food #1",
+      }),
+      color: "#27AE60",
     },
   ];
 
   const drinkToppingsData = [
     {
       title: "Jelly",
-      value: getItemsCount(orders, getToppingCount, {
+      value: getItemsCount(processedOrders, getToppingCount, {
         itemName: "Drink",
         toppingName: "jelly",
       }),
@@ -132,7 +148,9 @@ export const getPieChartDatas = (orders) => {
     },
     {
       title: "No Toppings",
-      value: getItemsCount(orders, getNoToppingsCount, { itemName: "Drink" }),
+      value: getItemsCount(processedOrders, getNoToppingsCount, {
+        itemName: "Drink",
+      }),
       color: "#BDC3C7",
     },
   ];
@@ -140,7 +158,7 @@ export const getPieChartDatas = (orders) => {
   const foodToppingsData = [
     {
       title: "Topping #1",
-      value: getItemsCount(orders, getToppingCount, {
+      value: getItemsCount(processedOrders, getToppingCount, {
         itemName: "Food #1",
         toppingName: "topping #1",
       }),
@@ -148,7 +166,7 @@ export const getPieChartDatas = (orders) => {
     },
     {
       title: "Topping #2",
-      value: getItemsCount(orders, getToppingCount, {
+      value: getItemsCount(processedOrders, getToppingCount, {
         itemName: "Food #1",
         toppingName: "topping #2",
       }),
@@ -156,7 +174,7 @@ export const getPieChartDatas = (orders) => {
     },
     {
       title: "Topping #3",
-      value: getItemsCount(orders, getToppingCount, {
+      value: getItemsCount(processedOrders, getToppingCount, {
         itemName: "Food #1",
         toppingName: "topping #3",
       }),
@@ -164,16 +182,18 @@ export const getPieChartDatas = (orders) => {
     },
     {
       title: "No Toppings",
-      value: getItemsCount(orders, getNoToppingsCount, { itemName: "Food #1" }),
+      value: getItemsCount(processedOrders, getNoToppingsCount, {
+        itemName: "Food #1",
+      }),
       color: "#BDC3C7",
     },
   ];
 
-  return {
-    paymentMethodData,
-    statusData,
-    drinkData,
-    drinkToppingsData,
-    foodToppingsData,
-  };
+  return [
+    { header: "Payment Method", data: paymentMethodData },
+    { header: "Status", data: statusData },
+    { header: "Items", data: itemsData },
+    { header: "Drink Toppings", data: drinkToppingsData },
+    { header: "Food Toppings", data: foodToppingsData },
+  ];
 };

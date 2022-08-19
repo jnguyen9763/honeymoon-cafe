@@ -1,8 +1,10 @@
+import { PAYMENT_METHODS } from "../constants/paymentMethods";
+import { STATUSES } from "../constants/statuses";
 import { getItemsCount, getPieChartDatas } from "../utils/getPieChartDatas";
 import FirestoreContext from "../states/FirestoreContext";
-import React, { useContext } from "react";
-import styled from "styled-components";
 import PieChartStat from "./PieChartStat";
+import React, { useContext, useMemo } from "react";
+import styled from "styled-components";
 
 const Container = styled.div`
   margin-top: 15px;
@@ -34,30 +36,51 @@ const getTotalQuantity = (items) => {
 
 const OrdersStats = () => {
   const { orders = [] } = useContext(FirestoreContext);
-  const {
-    paymentMethodData,
-    statusData,
-    drinkData,
-    drinkToppingsData,
-    foodToppingsData,
-  } = getPieChartDatas(orders);
+
+  const processedOrders = useMemo(
+    () => orders.filter(({ status }) => status !== STATUSES.CANCELED),
+    [orders]
+  );
+  const pieChartDatas = useMemo(
+    () => getPieChartDatas(orders, processedOrders),
+    [orders, processedOrders]
+  );
+
+  const totalItemsSold = getItemsCount(processedOrders, getTotalQuantity);
+  const cashAmount = getRevenue(
+    processedOrders.filter(
+      ({ paymentMethod }) => paymentMethod === PAYMENT_METHODS.CASH
+    )
+  );
+  const venmoAmount = getRevenue(
+    processedOrders.filter(
+      ({ paymentMethod }) => paymentMethod === PAYMENT_METHODS.VENMO
+    )
+  );
+  const totalRevenue = getRevenue(processedOrders);
 
   return (
     <Container>
       <Section>
         <Header>General Stats</Header>
-        <h5>Total orders: {orders.length}</h5>
-        <h5>Total items sold: {getItemsCount(orders, getTotalQuantity)}</h5>
-        <h5>Total revenue: ${getRevenue(orders)}</h5>
+        <h5>Total orders: {processedOrders.length}</h5>
+        <h5>Total items sold: {totalItemsSold}</h5>
+        <h5>Cash amount: ${cashAmount}</h5>
+        <h5>Venmo amount: ${venmoAmount}</h5>
+        <h5>Total revenue: ${totalRevenue}</h5>
       </Section>
       <Section>
         <Header>Charts</Header>
         <PieChartsContainer>
-          <PieChartStat header="Payment Method" data={paymentMethodData} />
-          <PieChartStat header="Status" data={statusData} />
-          <PieChartStat header="Drinks" data={drinkData} />
-          <PieChartStat header="Drink Toppings" data={drinkToppingsData} />
-          <PieChartStat header="Food Toppings" data={foodToppingsData} />
+          {pieChartDatas.map(({ header, data }) => {
+            return (
+              <PieChartStat
+                key={`piechart-${header}`}
+                header={header}
+                data={data}
+              />
+            );
+          })}
         </PieChartsContainer>
       </Section>
     </Container>
