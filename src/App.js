@@ -1,3 +1,4 @@
+import { AlertProvider } from "./states/AlertContext";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { FirestoreProvider } from "./states/FirestoreContext";
 import DashboardScreen from "./views/DashboardScreen";
@@ -9,18 +10,20 @@ import TakeOrderScreen from "./views/TakeOrderScreen";
 
 const App = () => {
   return (
-    <FirestoreProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<NavigationScreen />} />
-          <Route path="/take-order" element={<TakeOrderScreen />} />
-          <Route path="/order-overview" element={<OrderOverviewScreen />} />
-          <Route path="/pickup" element={<PickupScreen />} />
-          <Route path="/dashboard" element={<DashboardScreen />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </FirestoreProvider>
+    <AlertProvider>
+      <FirestoreProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<NavigationScreen />} />
+            <Route path="/take-order" element={<TakeOrderScreen />} />
+            <Route path="/order-overview" element={<OrderOverviewScreen />} />
+            <Route path="/pickup" element={<PickupScreen />} />
+            <Route path="/dashboard" element={<DashboardScreen />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </FirestoreProvider>
+    </AlertProvider>
   );
 };
 

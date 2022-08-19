@@ -7,6 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { useAlert } from "../hooks/useAlert";
 import FirestoreContext from "../states/FirestoreContext";
 import ItemList from "../components/ItemList";
 import ItemMaker from "../components/ItemMaker";
@@ -49,6 +50,7 @@ const getTotal = (items) => {
 
 const TakeOrderScreen = () => {
   const { createOrder, orderNumber } = useContext(FirestoreContext);
+  const { alertMessage, ALERT_TYPES } = useAlert();
   const [customerAmount, setCustomerAmount] = useState("");
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState("");
@@ -65,6 +67,10 @@ const TakeOrderScreen = () => {
 
   const onCreateOrder = (paymentMethod) => {
     createOrder({ items, notes, paymentMethod, totalAmount });
+    alertMessage({
+      type: ALERT_TYPES.SUCCESS,
+      message: "Created order successfully!",
+    });
     onResetOrderState();
   };
 
