@@ -7,6 +7,7 @@ import OrderOverviewScreen from "./views/OrderOverviewScreen";
 import PickupScreen from "./views/PickupScreen";
 import React from "react";
 import TakeOrderScreen from "./views/TakeOrderScreen";
+import Test from "./views/Test";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/order-overview" element={<OrderOverviewScreen />} />
             <Route path="/pickup" element={<PickupScreen />} />
             <Route path="/dashboard" element={<DashboardScreen />} />
+            <Route path="/test" element={<Test />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
