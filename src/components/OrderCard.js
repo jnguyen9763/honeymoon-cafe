@@ -1,10 +1,11 @@
 import { STATUSES } from "../constants/statuses";
 import { Button, Card, CardBody, CardText, CardTitle, List } from "reactstrap";
 import FirestoreContext from "../states/FirestoreContext";
+import ItemDisplay from "./ItemDisplay";
 import React, { useContext } from "react";
 import StatusBadge from "./StatusBadge";
-import styled from "styled-components";
 import StatusButton from "./StatusButton";
+import styled from "styled-components";
 
 const Body = styled(CardBody)`
   display: flex;
@@ -91,7 +92,7 @@ const OrderCard = ({ order }) => {
               {items.map(({ name, quantity }) => {
                 return (
                   <li key={`order-${orderNumber}-${name}`}>
-                    {name} ({quantity})
+                    <ItemDisplay name={name} quantity={quantity} />
                   </li>
                 );
               })}

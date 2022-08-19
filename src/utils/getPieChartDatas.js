@@ -42,6 +42,7 @@ export const getItemsCount = (orders, getItemsCountFunc, options) => {
   );
 };
 
+// TODO: clean this up and update
 export const getPieChartDatas = (orders) => {
   const paymentMethodData = [
     {

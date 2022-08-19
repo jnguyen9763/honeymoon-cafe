@@ -1,15 +1,12 @@
 import { STATUSES } from "../constants/statuses";
 import { Button, List, Table } from "reactstrap";
 import FirestoreContext from "../states/FirestoreContext";
+import ItemDisplay from "./ItemDisplay";
 import React, { useContext } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
   margin-top: 15px;
-`;
-
-const ItemDisplay = styled.span`
-  font-weight: 600;
 `;
 
 const ItemList = styled(List)`
@@ -51,7 +48,7 @@ const OrdersTable = () => {
                     {items.map(({ name, quantity }) => {
                       return (
                         <li key={`order-overview-${orderNumber}-${name}`}>
-                          <ItemDisplay>{name}</ItemDisplay> (Qty. {quantity})
+                          <ItemDisplay name={name} quantity={quantity} />
                         </li>
                       );
                     })}
