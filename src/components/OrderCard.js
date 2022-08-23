@@ -45,18 +45,18 @@ const UndoButton = styled(Button)`
 
 const OrderCard = ({ order }) => {
   const { updateOrderStatus } = useContext(FirestoreContext);
-  const { id, items = [], notes, orderNumber, status } = order;
+  const { items = [], notes, orderNumber, status } = order;
 
   const onProgressOrder = () => {
     switch (status) {
       case STATUSES.NEW:
-        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        updateOrderStatus(orderNumber, STATUSES.IN_PROGRESS);
         return;
       case STATUSES.IN_PROGRESS:
-        updateOrderStatus(id, STATUSES.COMPLETED);
+        updateOrderStatus(orderNumber, STATUSES.COMPLETED);
         return;
       case STATUSES.COMPLETED:
-        updateOrderStatus(id, STATUSES.PICKED_UP);
+        updateOrderStatus(orderNumber, STATUSES.PICKED_UP);
         return;
       default:
         return;
@@ -66,13 +66,13 @@ const OrderCard = ({ order }) => {
   const onUndoProgress = () => {
     switch (status) {
       case STATUSES.IN_PROGRESS:
-        updateOrderStatus(id, STATUSES.NEW);
+        updateOrderStatus(orderNumber, STATUSES.NEW);
         return;
       case STATUSES.COMPLETED:
-        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        updateOrderStatus(orderNumber, STATUSES.IN_PROGRESS);
         return;
       case STATUSES.PICKED_UP:
-        updateOrderStatus(id, STATUSES.COMPLETED);
+        updateOrderStatus(orderNumber, STATUSES.COMPLETED);
         return;
       default:
         return;

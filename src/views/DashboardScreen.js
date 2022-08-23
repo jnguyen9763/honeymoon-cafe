@@ -1,4 +1,4 @@
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import FirestoreContext from "../states/FirestoreContext";
 import OrdersStats from "../components/OrdersStats";
 import OrdersTable from "../components/OrdersTable";
@@ -21,6 +21,8 @@ const EmptyStateContainer = styled.div`
 
 const DashboardScreen = () => {
   const { orders = [] } = useContext(FirestoreContext);
+  const { initializeDb } = useContext(FirestoreContext);
+
   const [tabId, setTabId] = useState("1");
 
   if (!orders.length) {
@@ -49,6 +51,9 @@ const DashboardScreen = () => {
       </Nav>
       <TabContent activeTab={tabId}>
         <TabPane tabId="1">
+        <Button color={"warning"} size="sm" block onClick={initializeDb}>
+          Reset
+        </Button>
           <OrdersTable />
         </TabPane>
         <TabPane tabId="2">

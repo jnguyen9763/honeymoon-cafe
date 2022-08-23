@@ -32,7 +32,6 @@ const OrdersTable = () => {
         <tbody>
           {orders.map((order) => {
             const {
-              id,
               items,
               orderNumber,
               paymentMethod,
@@ -62,7 +61,7 @@ const OrdersTable = () => {
                     color="danger"
                     disabled={status === STATUSES.CANCELED}
                     size="sm"
-                    onClick={() => updateOrderStatus(id, STATUSES.CANCELED)}
+                    onClick={() => updateOrderStatus(orderNumber, STATUSES.CANCELED)}
                   >
                     Cancel
                   </Button>
