@@ -1,6 +1,9 @@
 import { PAYMENT_METHODS } from "../constants/paymentMethods";
 import { STATUSES } from "../constants/statuses";
 
+const ALL_DRINKS = ["Lavender Moon", "Pink Moon", "Blue Moon"];
+const ALL_FOODS = ["Donut Hole Skewers"];
+
 const getItemCount = (items, { itemName }) => {
   return items.reduce((acc, { name }) => {
     if (name.includes(itemName)) {
@@ -11,9 +14,12 @@ const getItemCount = (items, { itemName }) => {
   }, 0);
 };
 
-const getToppingCount = (items, { itemName, toppingName }) => {
+const getToppingCount = (items, { itemNames, toppingName }) => {
   return items.reduce((acc, { name }) => {
-    if (name.includes(itemName) && name.includes(toppingName)) {
+    if (
+      itemNames.some((itemName) => name.includes(itemName)) &&
+      name.includes(toppingName)
+    ) {
       return acc + 1;
     }
 
@@ -21,9 +27,12 @@ const getToppingCount = (items, { itemName, toppingName }) => {
   }, 0);
 };
 
-const getNoToppingsCount = (items, { itemName }) => {
+const getNoToppingsCount = (items, { itemNames }) => {
   return items.reduce((acc, { name }) => {
-    if (name.includes(itemName) && !name.includes("with")) {
+    if (
+      itemNames.some((itemName) => name.includes(itemName)) &&
+      !name.includes("with")
+    ) {
       return acc + 1;
     }
 
@@ -108,30 +117,30 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
 
   const itemsData = [
     {
-      title: "Drink #1",
+      title: "Lavender Moon",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Drink #1",
+        itemName: "Lavender Moon",
       }),
       color: "#E74C3C",
     },
     {
-      title: "Drink #2",
+      title: "Pink Moon",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Drink #2",
+        itemName: "Pink Moon",
       }),
       color: "#F1C40F",
     },
     {
-      title: "Drink #3",
+      title: "Blue Moon",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Drink #3",
+        itemName: "Blue Moon",
       }),
       color: "#3498DB",
     },
     {
-      title: "Food #1",
+      title: "Donut Hole Skewers",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Food #1",
+        itemName: "Donut Hole Skewers",
       }),
       color: "#27AE60",
     },
@@ -139,17 +148,17 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
 
   const drinkToppingsData = [
     {
-      title: "Jelly",
+      title: "Lychee Jelly",
       value: getItemsCount(processedOrders, getToppingCount, {
-        itemName: "Drink",
-        toppingName: "jelly",
+        itemNames: ALL_DRINKS,
+        toppingName: "lychee jelly",
       }),
       color: "#F39C12",
     },
     {
       title: "No Toppings",
       value: getItemsCount(processedOrders, getNoToppingsCount, {
-        itemName: "Drink",
+        itemNames: ALL_DRINKS,
       }),
       color: "#BDC3C7",
     },
@@ -157,33 +166,33 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
 
   const foodToppingsData = [
     {
-      title: "Topping #1",
+      title: "Cookies and Creme",
       value: getItemsCount(processedOrders, getToppingCount, {
-        itemName: "Food #1",
-        toppingName: "topping #1",
+        itemNames: ALL_FOODS,
+        toppingName: "cookies and creme",
       }),
       color: "#2ECC71",
     },
     {
-      title: "Topping #2",
+      title: "Graham Crackers",
       value: getItemsCount(processedOrders, getToppingCount, {
-        itemName: "Food #1",
-        toppingName: "topping #2",
+        itemNames: ALL_FOODS,
+        toppingName: "graham crackers",
       }),
       color: "#F39C12",
     },
     {
-      title: "Topping #3",
+      title: "Fruit Pebbles",
       value: getItemsCount(processedOrders, getToppingCount, {
-        itemName: "Food #1",
-        toppingName: "topping #3",
+        itemNames: ALL_FOODS,
+        toppingName: "fruit pebbles",
       }),
       color: "#8E44AD",
     },
     {
       title: "No Toppings",
       value: getItemsCount(processedOrders, getNoToppingsCount, {
-        itemName: "Food #1",
+        itemNames: ALL_FOODS,
       }),
       color: "#BDC3C7",
     },
