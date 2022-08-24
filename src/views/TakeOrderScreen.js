@@ -114,7 +114,7 @@ const TakeOrderScreen = () => {
         onChange={(evt) => setNotes(evt.target.value)}
       />
       <ItemsPricing
-        change={change.toFixed(2)}
+        change={change}
         customerAmount={customerAmount}
         setCustomerAmount={setCustomerAmount}
         total={totalAmount}

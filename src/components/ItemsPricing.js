@@ -62,7 +62,7 @@ const ItemsPricing = ({ change, customerAmount, setCustomerAmount, total }) => {
       <Row>
         <LabelCell>Change:</LabelCell>
         <NumberCell>
-          {change < 0 ? `-$${Math.abs(change)}` : `$${change}`}
+          {change < 0 ? "-" : ""}${Math.abs(change).toFixed(2)}
         </NumberCell>
       </Row>
     </Container>
