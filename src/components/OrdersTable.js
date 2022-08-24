@@ -9,7 +9,11 @@ const Container = styled.div`
   margin-top: 15px;
 `;
 
-const ItemList = styled(List)`
+const ItemsCell = styled.li`
+  white-space: nowrap;
+`;
+
+const ItemsList = styled(List)`
   margin: 0;
 `;
 
@@ -44,15 +48,17 @@ const OrdersTable = () => {
               <tr key={`order-overview-${orderNumber}`}>
                 <th scope="row">{orderNumber}</th>
                 <td>
-                  <ItemList>
+                  <ItemsList>
                     {items.map(({ name, quantity }) => {
                       return (
-                        <li key={`order-overview-${orderNumber}-${name}`}>
+                        <ItemsCell
+                          key={`order-overview-${orderNumber}-${name}`}
+                        >
                           <ItemDisplay name={name} quantity={quantity} />
-                        </li>
+                        </ItemsCell>
                       );
                     })}
-                  </ItemList>
+                  </ItemsList>
                 </td>
                 <td>${totalAmount}</td>
                 <td>{paymentMethod}</td>

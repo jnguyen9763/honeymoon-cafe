@@ -8,10 +8,11 @@ const ComponentContainer = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   height: 100%;
   min-height: 100%;
+  min-width: 100%;
 `;
 
 const Logo = styled.img`
