@@ -123,6 +123,7 @@ const TakeOrderScreen = () => {
         <Button
           color="success"
           disabled={disablePaymentButtons}
+          size="lg"
           onClick={() => onCreateOrder(PAYMENT_METHODS.CASH)}
         >
           Paid Cash
@@ -131,6 +132,7 @@ const TakeOrderScreen = () => {
         <Button
           color="primary"
           disabled={disablePaymentButtons}
+          size="lg"
           onClick={() => onCreateOrder(PAYMENT_METHODS.VENMO)}
         >
           Paid Venmo

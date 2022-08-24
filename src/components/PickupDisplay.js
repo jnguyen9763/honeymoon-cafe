@@ -11,19 +11,16 @@ const Container = styled.div`
 
 const Heading = styled.div`
   color: #ebbe00;
-  font-size: 30px;
-`;
-
-const NumberDisplay = styled.div`
-  display: inline-block;
-  padding-right: 40px;
+  font-size: 4vw;
 `;
 
 const NumbersContainer = styled.div`
   color: #ffffff;
-  font-size: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 8vw;
+  gap: 0 5.5vw;
   overflow: auto;
-  margin-top: 30px;
 `;
 
 const PickupDisplay = ({ heading, orderNumbers = [] }) => {
@@ -32,11 +29,7 @@ const PickupDisplay = ({ heading, orderNumbers = [] }) => {
       <Heading>{heading}</Heading>
       <NumbersContainer>
         {orderNumbers.map((orderNumber) => {
-          return (
-            <NumberDisplay key={`${heading}-${orderNumber}`}>
-              {orderNumber}
-            </NumberDisplay>
-          );
+          return <span key={`${heading}-${orderNumber}`}>{orderNumber}</span>;
         })}
       </NumbersContainer>
     </Container>
