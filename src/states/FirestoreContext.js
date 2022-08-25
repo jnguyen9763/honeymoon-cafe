@@ -11,11 +11,14 @@ export const FirestoreProvider = ({ children }) => {
     setOrders([
       ...orders,
       {
+        barista: undefined,
         id: orderNumber, // <== should be firestore id
-        items: Object.keys(items).map((name) => ({
-          name,
-          quantity: items[name].quantity,
-        })),
+        items: Object.keys(items)
+          .map((name) => ({
+            name,
+            quantity: items[name].quantity,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)),
         notes,
         orderNumber,
         paymentMethod,
@@ -26,10 +29,10 @@ export const FirestoreProvider = ({ children }) => {
     setOrderNumber(orderNumber + 1);
   };
 
-  const updateOrderStatus = (firestoreId, newStatus) => {
+  const updateOrderProperties = (orderNumber, newProperties) => {
     const newOrders = orders.map((order) => {
-      if (order.orderNumber === firestoreId) {
-        return { ...order, status: newStatus };
+      if (order.orderNumber === orderNumber) {
+        return { ...order, ...newProperties };
       }
 
       return order;
@@ -42,7 +45,7 @@ export const FirestoreProvider = ({ children }) => {
     orders,
     orderNumber,
     createOrder,
-    updateOrderStatus,
+    updateOrderProperties,
   };
 
   return (

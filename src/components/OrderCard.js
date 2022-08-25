@@ -1,8 +1,20 @@
+import { BARISTAS } from "../constants/baristas";
 import { STATUSES } from "../constants/statuses";
-import { Button, Card, CardBody, CardTitle, List } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Input,
+  List,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
 import FirestoreContext from "../states/FirestoreContext";
 import ItemDisplay from "./ItemDisplay";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import StatusBadge from "./StatusBadge";
 import StatusButton from "./StatusButton";
 import styled from "styled-components";
@@ -73,19 +85,24 @@ const UndoButton = styled(Button)`
 `;
 
 const OrderCard = ({ order }) => {
-  const { updateOrderStatus } = useContext(FirestoreContext);
-  const { id, items = [], notes, orderNumber, status } = order;
+  const firstBarista = BARISTAS[0];
+  const { updateOrderProperties } = useContext(FirestoreContext);
+  const { barista, id, items = [], notes, orderNumber, status } = order;
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedBarista, setSelectedBarista] = useState(firstBarista);
+
+  const toggle = () => setOpenModal(!openModal);
 
   const onProgressOrder = () => {
     switch (status) {
       case STATUSES.NEW:
-        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        toggle();
         return;
       case STATUSES.IN_PROGRESS:
-        updateOrderStatus(id, STATUSES.COMPLETED);
+        updateOrderProperties(id, { status: STATUSES.COMPLETED });
         return;
       case STATUSES.COMPLETED:
-        updateOrderStatus(id, STATUSES.PICKED_UP);
+        updateOrderProperties(id, { status: STATUSES.PICKED_UP });
         return;
       default:
         return;
@@ -95,17 +112,24 @@ const OrderCard = ({ order }) => {
   const onUndoProgress = () => {
     switch (status) {
       case STATUSES.IN_PROGRESS:
-        updateOrderStatus(id, STATUSES.NEW);
+        updateOrderProperties(id, { barista: undefined, status: STATUSES.NEW });
         return;
       case STATUSES.COMPLETED:
-        updateOrderStatus(id, STATUSES.IN_PROGRESS);
+        updateOrderProperties(id, { status: STATUSES.IN_PROGRESS });
         return;
       case STATUSES.PICKED_UP:
-        updateOrderStatus(id, STATUSES.COMPLETED);
+        updateOrderProperties(id, { status: STATUSES.COMPLETED });
         return;
       default:
         return;
     }
+  };
+
+  const onSelectBarista = () => {
+    updateOrderProperties(id, {
+      barista: selectedBarista,
+      status: STATUSES.IN_PROGRESS,
+    });
   };
 
   return (
@@ -116,6 +140,7 @@ const OrderCard = ({ order }) => {
             <OrderHeader>Order #{orderNumber}</OrderHeader>{" "}
             <StatusBadge status={status} />
           </Title>
+          {barista && <h6>Barista: {barista}</h6>}
           <Text>
             <div>
               <List>
@@ -147,6 +172,33 @@ const OrderCard = ({ order }) => {
           </Text>
         </Body>
       </Container>
+      <Modal isOpen={openModal} toggle={toggle} centered>
+        <ModalHeader toggle={toggle}>Choose barista</ModalHeader>
+        <ModalBody>
+          <Input
+            id="item"
+            name="select"
+            type="select"
+            onChange={(evt) => setSelectedBarista(evt.target.value)}
+          >
+            {BARISTAS.map((baristaName) => {
+              return (
+                <option key={`barista-${baristaName}`} value={baristaName}>
+                  {baristaName}
+                </option>
+              );
+            })}
+          </Input>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={onSelectBarista}>
+            Select
+          </Button>{" "}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </CardContainer>
   );
 };

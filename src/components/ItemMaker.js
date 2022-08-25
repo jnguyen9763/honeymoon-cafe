@@ -64,7 +64,9 @@ const ItemMaker = ({ onUpdateItem }) => {
 
     let item = ITEMS[selectedItemKey].name;
     if (toppings.length) {
-      item = `${item} with ${toppings.join(", ")}`;
+      item = `${item} with ${toppings
+        .sort((a, b) => a.localeCompare(b))
+        .join(", ")}`;
     }
 
     onUpdateItem({ item, price: ITEMS[selectedItemKey].price, quantity: 1 });

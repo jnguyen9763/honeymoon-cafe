@@ -18,7 +18,7 @@ const ItemsList = styled(List)`
 `;
 
 const OrdersTable = () => {
-  const { orders = [], updateOrderStatus } = useContext(FirestoreContext);
+  const { orders = [], updateOrderProperties } = useContext(FirestoreContext);
 
   return (
     <Container>
@@ -68,7 +68,9 @@ const OrdersTable = () => {
                     color="danger"
                     disabled={status === STATUSES.CANCELED}
                     size="sm"
-                    onClick={() => updateOrderStatus(id, STATUSES.CANCELED)}
+                    onClick={() =>
+                      updateOrderProperties(id, { status: STATUSES.CANCELED })
+                    }
                   >
                     Cancel
                   </Button>

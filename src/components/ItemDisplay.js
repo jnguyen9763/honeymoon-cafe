@@ -8,7 +8,7 @@ const NameContainer = styled.span`
 const ItemDisplay = ({ name, quantity }) => {
   return (
     <>
-      <NameContainer>{name}</NameContainer> (Qty. {quantity})
+      ({quantity}) <NameContainer>{name}</NameContainer>
     </>
   );
 };
