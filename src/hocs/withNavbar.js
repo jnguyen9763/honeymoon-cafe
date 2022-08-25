@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import AuthContext from "../states/AuthContext";
+import PasswordScreen from "../views/PasswordScreen";
+import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import styled from "styled-components";
 
@@ -27,18 +29,22 @@ const Navbar = styled.div`
 `;
 
 const withNavbar = (Component) => {
-  return (props) => (
-    <Container>
-      <Navbar>
-        <Link to="/">
-          <Logo src={logo} />
-        </Link>
-      </Navbar>
-      <ComponentContainer>
-        <Component {...props} />
-      </ComponentContainer>
-    </Container>
-  );
+  return (props) => {
+    const { enteredPassword } = useContext(AuthContext);
+
+    return (
+      <Container>
+        <Navbar>
+          <Link to="/">
+            <Logo src={logo} />
+          </Link>
+        </Navbar>
+        <ComponentContainer>
+          {enteredPassword ? <Component {...props} /> : <PasswordScreen />}
+        </ComponentContainer>
+      </Container>
+    );
+  };
 };
 
 export default withNavbar;
