@@ -87,7 +87,7 @@ const UndoButton = styled(Button)`
 const OrderCard = ({ order }) => {
   const firstBarista = BARISTAS[0];
   const { updateOrderProperties } = useContext(FirestoreContext);
-  const { barista, id, items = [], notes, orderNumber, status } = order;
+  const { barista, items = [], notes, orderNumber, status } = order;
   const [openModal, setOpenModal] = useState(false);
   const [selectedBarista, setSelectedBarista] = useState(firstBarista);
 
@@ -99,10 +99,10 @@ const OrderCard = ({ order }) => {
         toggle();
         return;
       case STATUSES.IN_PROGRESS:
-        updateOrderProperties(id, { status: STATUSES.COMPLETED });
+        updateOrderProperties(orderNumber, { status: STATUSES.COMPLETED });
         return;
       case STATUSES.COMPLETED:
-        updateOrderProperties(id, { status: STATUSES.PICKED_UP });
+        updateOrderProperties(orderNumber, { status: STATUSES.PICKED_UP });
         return;
       default:
         return;
@@ -112,13 +112,16 @@ const OrderCard = ({ order }) => {
   const onUndoProgress = () => {
     switch (status) {
       case STATUSES.IN_PROGRESS:
-        updateOrderProperties(id, { barista: undefined, status: STATUSES.NEW });
+        updateOrderProperties(orderNumber, {
+          barista: undefined,
+          status: STATUSES.NEW,
+        });
         return;
       case STATUSES.COMPLETED:
-        updateOrderProperties(id, { status: STATUSES.IN_PROGRESS });
+        updateOrderProperties(orderNumber, { status: STATUSES.IN_PROGRESS });
         return;
       case STATUSES.PICKED_UP:
-        updateOrderProperties(id, { status: STATUSES.COMPLETED });
+        updateOrderProperties(orderNumber, { status: STATUSES.COMPLETED });
         return;
       default:
         return;
@@ -126,7 +129,7 @@ const OrderCard = ({ order }) => {
   };
 
   const onSelectBarista = () => {
-    updateOrderProperties(id, {
+    updateOrderProperties(orderNumber, {
       barista: selectedBarista,
       status: STATUSES.IN_PROGRESS,
     });

@@ -35,14 +35,8 @@ const OrdersTable = () => {
         </thead>
         <tbody>
           {orders.map((order) => {
-            const {
-              id,
-              items,
-              orderNumber,
-              paymentMethod,
-              status,
-              totalAmount,
-            } = order;
+            const { items, orderNumber, paymentMethod, status, totalAmount } =
+              order;
 
             return (
               <tr key={`order-overview-${orderNumber}`}>
@@ -69,7 +63,9 @@ const OrdersTable = () => {
                     disabled={status === STATUSES.CANCELED}
                     size="sm"
                     onClick={() =>
-                      updateOrderProperties(id, { status: STATUSES.CANCELED })
+                      updateOrderProperties(orderNumber, {
+                        status: STATUSES.CANCELED,
+                      })
                     }
                   >
                     Cancel

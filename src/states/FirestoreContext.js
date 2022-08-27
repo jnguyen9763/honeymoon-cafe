@@ -12,7 +12,6 @@ export const FirestoreProvider = ({ children }) => {
       ...orders,
       {
         barista: undefined,
-        id: orderNumber, // <== should be firestore id
         items: Object.keys(items)
           .map((name) => ({
             name,
