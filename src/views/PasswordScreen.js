@@ -14,12 +14,14 @@ const Container = styled.div`
   }
 `;
 
+const PASSWORD = "hoony";
+
 const PasswordScreen = () => {
   const { setEnteredPassword } = useContext(AuthContext);
   const [password, setPassword] = useState("");
 
   const onClick = () => {
-    if (password === "hoony") {
+    if (password === PASSWORD) {
       localStorage.setItem("HoneymoonCafe:EnteredPassword", "true");
       setEnteredPassword(true);
     }

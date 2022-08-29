@@ -6,7 +6,7 @@ export const useAlert = () => {
   const { setAlertProps, setShowAlert } = useContext(AlertContext);
   const timeoutId = useRef(null);
 
-  const alertMessage = ({ type, message }) => {
+  const alertMessage = ({ type = ALERT_TYPES.ERROR, message }) => {
     clearTimeout(timeoutId.current);
     setShowAlert(false);
 

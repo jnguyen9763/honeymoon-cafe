@@ -7,7 +7,7 @@ const AlertContainer = styled.div`
   left: 50%;
   max-width: 90%;
   position: fixed;
-  top: 15px;
+  top: 30px;
   transform: translateX(-50%);
 `;
 
@@ -32,7 +32,7 @@ export const AlertProvider = ({ children }) => {
     let timeoutId;
 
     if (showAlert) {
-      timeoutId = setTimeout(() => setShowAlert(false), 3000);
+      timeoutId = setTimeout(() => setShowAlert(false), 2000);
     }
 
     return () => {
