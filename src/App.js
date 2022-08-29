@@ -11,10 +11,10 @@ import TakeOrderScreen from "./views/TakeOrderScreen";
 
 const App = () => {
   return (
+  <BrowserRouter>
     <AlertProvider>
       <AuthProvider>
         <FirestoreProvider>
-          <BrowserRouter>
             <Routes>
               <Route path="/" element={<NavigationScreen />} />
               <Route path="/take-order" element={<TakeOrderScreen />} />
@@ -23,10 +23,10 @@ const App = () => {
               <Route path="/dashboard" element={<DashboardScreen />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </BrowserRouter>
-        </FirestoreProvider>
-      </AuthProvider>
-    </AlertProvider>
+          </FirestoreProvider>
+        </AuthProvider>
+      </AlertProvider>
+    </BrowserRouter>
   );
 };
 

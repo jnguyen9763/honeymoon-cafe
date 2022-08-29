@@ -1,31 +1,60 @@
 import { STATUSES } from "../constants/statuses";
-import React, { createContext, useState } from "react";
+import React, { createContext } from "react";
+import { doc, collection } from 'firebase/firestore';
+import { useDocument, useCollection } from 'react-firebase-hooks/firestore'
+import { firestore } from "../firebase";
+import { useAlert } from "../hooks/useAlert";
+import { Spinner } from 'reactstrap'
+import LoadingScreen from '../views/LoadingScreen'
 
 const FirestoreContext = createContext({});
 
 export const FirestoreProvider = ({ children }) => {
-  const [orders, setOrders] = useState([]);
-  const [orderNumber, setOrderNumber] = useState(1);
+  const [orderNumVal, orderNumLoading, orderNumError] = useDocument(
+    doc(firestore, 'orderNumber', 'orderNumber'),
+  );
+
+  const [ordersVal, ordersLoading, ordersError] = useCollection(
+    collection(firestore, 'orders'),
+  );
+    
+  if (orderNumError || ordersError ) {
+    return <div>
+          {ordersError && <strong>Error: {JSON.stringify(ordersError)}</strong>}
+          {orderNumError && <strong>Error: {JSON.stringify(orderNumError)}</strong>}
+    </div>
+  }  
+
+
+  if (ordersLoading || orderNumLoading) {
+    return <LoadingScreen/>
+  }
+
+  const { orderNumber } = orderNumVal.data()
+
+  const orders = ordersVal.docs.map((doc) => doc.data())
+
+  console.log(orders)
 
   const createOrder = ({ items, notes, paymentMethod, totalAmount }) => {
-    setOrders([
-      ...orders,
-      {
-        barista: undefined,
-        items: Object.keys(items)
-          .map((name) => ({
-            name,
-            quantity: items[name].quantity,
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name)),
-        notes,
-        orderNumber,
-        paymentMethod,
-        status: STATUSES.NEW,
-        totalAmount,
-      },
-    ]);
-    setOrderNumber(orderNumber + 1);
+    // setOrders([
+    //   ...orders,
+    //   {
+    //     barista: undefined,
+    //     items: Object.keys(items)
+    //       .map((name) => ({
+    //         name,
+    //         quantity: items[name].quantity,
+    //       }))
+    //       .sort((a, b) => a.name.localeCompare(b.name)),
+    //     notes,
+    //     orderNumber,
+    //     paymentMethod,
+    //     status: STATUSES.NEW,
+    //     totalAmount,
+    //   },
+    // ]);
+    // setOrderNumber(orderNumber + 1);
   };
 
   const updateOrderProperties = (orderNumber, newProperties) => {
@@ -37,7 +66,7 @@ export const FirestoreProvider = ({ children }) => {
       return order;
     });
 
-    setOrders(newOrders);
+    // setOrders(newOrders);
   };
 
   const contextValue = {
