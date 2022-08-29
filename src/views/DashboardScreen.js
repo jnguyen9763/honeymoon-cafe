@@ -1,5 +1,6 @@
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import FirestoreContext from "../states/FirestoreContext";
+import OrdersActions from "../components/OrdersActions";
 import OrdersStats from "../components/OrdersStats";
 import OrdersTable from "../components/OrdersTable";
 import React, { useContext, useState } from "react";
@@ -46,6 +47,14 @@ const DashboardScreen = () => {
             Stats
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink
+            className={tabId === "3" && "active"}
+            onClick={() => setTabId("3")}
+          >
+            Actions
+          </NavLink>
+        </NavItem>
       </Nav>
       <TabContent activeTab={tabId}>
         <TabPane tabId="1">
@@ -53,6 +62,9 @@ const DashboardScreen = () => {
         </TabPane>
         <TabPane tabId="2">
           <OrdersStats />
+        </TabPane>
+        <TabPane tabId="3">
+          <OrdersActions />
         </TabPane>
       </TabContent>
     </Container>
