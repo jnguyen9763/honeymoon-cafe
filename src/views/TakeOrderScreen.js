@@ -49,8 +49,8 @@ const getTotal = (items) => {
 };
 
 const TakeOrderScreen = () => {
-  const { createOrder, orderNumber } = useContext(FirestoreContext);
   const { alertMessage, ALERT_TYPES } = useAlert();
+  const { createOrder, orderNumber } = useContext(FirestoreContext);
   const [customerAmount, setCustomerAmount] = useState("");
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState("");
@@ -65,13 +65,19 @@ const TakeOrderScreen = () => {
     setItems({});
   };
 
-  const onCreateOrder = (paymentMethod) => {
-    createOrder({ items, notes, paymentMethod, totalAmount });
-    alertMessage({
-      type: ALERT_TYPES.SUCCESS,
-      message: "Created order successfully!",
-    });
-    onResetOrderState();
+  const onCreateOrder = async (paymentMethod) => {
+    try {
+      await createOrder({ items, notes, paymentMethod, totalAmount });
+      alertMessage({
+        type: ALERT_TYPES.SUCCESS,
+        message: "Created order successfully!",
+      });
+      onResetOrderState();
+    } catch (e) {
+      alertMessage({
+        message: "Error: Unable to create order.",
+      });
+    }
   };
 
   const onUpdateItem = ({ item, price, quantity }) => {

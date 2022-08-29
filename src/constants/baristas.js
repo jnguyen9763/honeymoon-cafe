@@ -1,1 +1,14 @@
-export const BARISTAS = ["PERSON_ONE", "PERSON_TWO", "PERSON_THREE"];
+export const BARISTAS = [
+  "Amber",
+  "Brian",
+  "Jackie",
+  "Khoa",
+  "Kinh",
+  "Nhan",
+  "Robert",
+  "Samaya",
+  "Selena",
+  "Thao",
+  "Thu",
+  "Tien",
+];
