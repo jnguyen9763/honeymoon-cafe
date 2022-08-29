@@ -40,7 +40,7 @@ export const ITEMS = Object.freeze({
   },
   FOOD_ONE: {
     key: "FOOD_ONE",
-    name: "Donut Hole Skewers",
+    name: "Moonettes",
     price: FOOD_PRICE,
     toppings: FOOD_TOPPINGS,
   },

@@ -16,7 +16,15 @@ const Container = styled.div`
 
 const Divider = styled.div`
   background-color: #ebbe00;
-  width: 5px;
+
+  @media (orientation: landscape) {
+    width: 5px;
+  }
+
+  @media (orientation: portrait) {
+    height: 5px;
+    margin: 30px;
+  }
 `;
 
 const Logo = styled.img`
@@ -35,6 +43,14 @@ const TableContainer = styled.div`
   margin-bottom: 30px;
   overflow: hidden;
   width: 100%;
+
+  @media (orientation: landscape) {
+    flex-direction: row;
+  }
+
+  @media (orientation: portrait) {
+    flex-direction: column;
+  }
 `;
 
 const PickupScreen = () => {

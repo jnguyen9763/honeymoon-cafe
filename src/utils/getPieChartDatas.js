@@ -2,7 +2,7 @@ import { PAYMENT_METHODS } from "../constants/paymentMethods";
 import { STATUSES } from "../constants/statuses";
 
 const ALL_DRINKS = ["Lavender Moon", "Pink Moon", "Blue Moon"];
-const ALL_FOODS = ["Donut Hole Skewers"];
+const ALL_FOODS = ["Moonettes"];
 
 const getItemCount = (items, { itemName }) => {
   return items.reduce((acc, { name }) => {
@@ -138,9 +138,9 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
       color: "#3498DB",
     },
     {
-      title: "Donut Hole Skewers",
+      title: "Moonettes",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Donut Hole Skewers",
+        itemName: "Moonettes",
       }),
       color: "#27AE60",
     },
