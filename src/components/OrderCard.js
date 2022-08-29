@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { useAlert } from "../hooks/useAlert";
 import FirestoreContext from "../states/FirestoreContext";
 import ItemDisplay from "./ItemDisplay";
 import React, { useContext, useState } from "react";
@@ -86,6 +87,7 @@ const UndoButton = styled(Button)`
 
 const OrderCard = ({ order }) => {
   const firstBarista = BARISTAS[0];
+  const { alertMessage } = useAlert();
   const { updateOrderProperties } = useContext(FirestoreContext);
   const { barista, items = [], notes, orderNumber, status } = order;
   const [openModal, setOpenModal] = useState(false);
@@ -93,46 +95,74 @@ const OrderCard = ({ order }) => {
 
   const toggle = () => setOpenModal(!openModal);
 
-  const onProgressOrder = () => {
-    switch (status) {
-      case STATUSES.NEW:
-        toggle();
-        return;
-      case STATUSES.IN_PROGRESS:
-        updateOrderProperties(orderNumber, { status: STATUSES.COMPLETED });
-        return;
-      case STATUSES.COMPLETED:
-        updateOrderProperties(orderNumber, { status: STATUSES.PICKED_UP });
-        return;
-      default:
-        return;
+  const onProgressOrder = async () => {
+    try {
+      switch (status) {
+        case STATUSES.NEW:
+          toggle();
+          return;
+        case STATUSES.IN_PROGRESS:
+          await updateOrderProperties(orderNumber, {
+            status: STATUSES.COMPLETED,
+          });
+          return;
+        case STATUSES.COMPLETED:
+          await updateOrderProperties(orderNumber, {
+            status: STATUSES.PICKED_UP,
+          });
+          return;
+        default:
+          return;
+      }
+    } catch (e) {
+      alertMessage({
+        message: "Error: Unable to update order status.",
+      });
     }
   };
 
-  const onUndoProgress = () => {
-    switch (status) {
-      case STATUSES.IN_PROGRESS:
-        updateOrderProperties(orderNumber, {
-          barista: undefined,
-          status: STATUSES.NEW,
-        });
-        return;
-      case STATUSES.COMPLETED:
-        updateOrderProperties(orderNumber, { status: STATUSES.IN_PROGRESS });
-        return;
-      case STATUSES.PICKED_UP:
-        updateOrderProperties(orderNumber, { status: STATUSES.COMPLETED });
-        return;
-      default:
-        return;
+  const onUndoProgress = async () => {
+    try {
+      switch (status) {
+        case STATUSES.IN_PROGRESS:
+          await updateOrderProperties(orderNumber, {
+            barista: null,
+            status: STATUSES.NEW,
+          });
+          return;
+        case STATUSES.COMPLETED:
+          await updateOrderProperties(orderNumber, {
+            status: STATUSES.IN_PROGRESS,
+          });
+          return;
+        case STATUSES.PICKED_UP:
+          await updateOrderProperties(orderNumber, {
+            status: STATUSES.COMPLETED,
+          });
+          return;
+        default:
+          return;
+      }
+    } catch (e) {
+      alertMessage({
+        message: "Error: Unable to update order status.",
+      });
     }
   };
 
-  const onSelectBarista = () => {
-    updateOrderProperties(orderNumber, {
-      barista: selectedBarista,
-      status: STATUSES.IN_PROGRESS,
-    });
+  const onSelectBarista = async () => {
+    try {
+      await updateOrderProperties(orderNumber, {
+        barista: selectedBarista,
+        status: STATUSES.IN_PROGRESS,
+      });
+    } catch (e) {
+      alertMessage({
+        message: "Error: Unable to update order's barista.",
+      });
+    } finally {
+      toggle();
+    }
   };
 
   return (

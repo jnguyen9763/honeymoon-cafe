@@ -1,8 +1,17 @@
 import { STATUSES } from "../constants/statuses";
-import { Button, List, Table } from "reactstrap";
+import {
+  Button,
+  List,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Table,
+} from "reactstrap";
+import { useAlert } from "../hooks/useAlert";
 import FirestoreContext from "../states/FirestoreContext";
 import ItemDisplay from "./ItemDisplay";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -18,7 +27,39 @@ const ItemsList = styled(List)`
 `;
 
 const OrdersTable = () => {
+  const { alertMessage } = useAlert();
   const { orders = [], updateOrderProperties } = useContext(FirestoreContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [cancelOrderNumber, setCancelOrderNumber] = useState(undefined);
+
+  const toggle = () => {
+    const newOpenModal = !openModal;
+
+    if (!newOpenModal) {
+      setCancelOrderNumber(undefined);
+    }
+
+    setOpenModal(newOpenModal);
+  };
+
+  const onOpenModal = (orderNumber) => {
+    setCancelOrderNumber(orderNumber);
+    toggle();
+  };
+
+  const onCancelOrder = async () => {
+    try {
+      await updateOrderProperties(cancelOrderNumber, {
+        status: STATUSES.CANCELED,
+      });
+    } catch (e) {
+      alertMessage({
+        message: "Error: Unable to cancel order.",
+      });
+    } finally {
+      toggle();
+    }
+  };
 
   return (
     <Container>
@@ -62,11 +103,7 @@ const OrdersTable = () => {
                     color="danger"
                     disabled={status === STATUSES.CANCELED}
                     size="sm"
-                    onClick={() =>
-                      updateOrderProperties(orderNumber, {
-                        status: STATUSES.CANCELED,
-                      })
-                    }
+                    onClick={() => onOpenModal(orderNumber)}
                   >
                     Cancel
                   </Button>
@@ -76,6 +113,20 @@ const OrdersTable = () => {
           })}
         </tbody>
       </Table>
+      <Modal isOpen={openModal} toggle={toggle} centered>
+        <ModalHeader toggle={toggle}>Cancel order</ModalHeader>
+        <ModalBody>
+          Are you sure you want to cancel Order #{cancelOrderNumber}?
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={onCancelOrder}>
+            Reset order
+          </Button>{" "}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Container>
   );
 };
