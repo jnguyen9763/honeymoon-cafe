@@ -29,6 +29,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `firebase deploy`
+
+Deploys the current build folder to hosting server. To see new changes, run `npm run build` to create new build before deployment.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
