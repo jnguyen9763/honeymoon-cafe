@@ -43,7 +43,6 @@ export const FirestoreProvider = ({ children }) => {
     const orderRef = doc(firestore, "orders", `${orderNumber}`);
 
     const newOrder = {
-      barista: null,
       items: Object.keys(items)
         .map((name) => ({
           name,
