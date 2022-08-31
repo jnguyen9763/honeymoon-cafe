@@ -3,7 +3,6 @@ import { Button } from "reactstrap";
 import React from "react";
 
 const BUTTONS = Object.freeze({
-  [STATUSES.NEW]: { color: "warning", text: "In progress" },
   [STATUSES.IN_PROGRESS]: { color: "success", text: "Completed" },
   [STATUSES.COMPLETED]: { color: "dark", text: "Picked up" },
 });

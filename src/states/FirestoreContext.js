@@ -52,7 +52,7 @@ export const FirestoreProvider = ({ children }) => {
       notes,
       orderNumber,
       paymentMethod,
-      status: STATUSES.NEW,
+      status: STATUSES.IN_PROGRESS,
       totalAmount,
     };
 

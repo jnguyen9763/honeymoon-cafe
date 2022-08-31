@@ -1,5 +1,5 @@
-const DRINK_PRICE = 5;
-const FOOD_PRICE = 5;
+const PRICE = 6;
+export const DISCOUNT = 2;
 
 const DRINK_TOPPINGS = Object.freeze({
   TOPPING_ONE: { key: "TOPPING_ONE", name: "Lychee Jelly", selected: true },
@@ -22,26 +22,26 @@ const FOOD_TOPPINGS = Object.freeze({
 export const ITEMS = Object.freeze({
   DRINK_ONE: {
     key: "DRINK_ONE",
-    name: "Lavender Moon",
-    price: DRINK_PRICE,
+    name: "Gold Moon",
+    price: PRICE,
     toppings: DRINK_TOPPINGS,
   },
   DRINK_TWO: {
     key: "DRINK_TWO",
     name: "Pink Moon",
-    price: DRINK_PRICE,
+    price: PRICE,
     toppings: DRINK_TOPPINGS,
   },
   DRINK_THREE: {
     key: "DRINK_THREE",
     name: "Blue Moon",
-    price: DRINK_PRICE,
+    price: PRICE,
     toppings: DRINK_TOPPINGS,
   },
   FOOD_ONE: {
     key: "FOOD_ONE",
     name: "Moonettes",
-    price: FOOD_PRICE,
+    price: PRICE,
     toppings: FOOD_TOPPINGS,
   },
 });

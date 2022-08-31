@@ -15,7 +15,6 @@ const EmptyStateContainer = styled.div`
 `;
 
 const SECTIONS = [
-  { header: "New Orders", status: STATUSES.NEW },
   { header: "In Progress Orders", status: STATUSES.IN_PROGRESS },
   { header: "Completed Orders", status: STATUSES.COMPLETED },
   { header: "Picked-up Orders", status: STATUSES.PICKED_UP },

@@ -1,3 +1,4 @@
+import { DISCOUNT } from "../constants/items";
 import { PAYMENT_METHODS } from "../constants/paymentMethods";
 import {
   Button,
@@ -7,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { getTotalQuantity } from "../utils/getPieChartDatas";
 import { useAlert } from "../hooks/useAlert";
 import FirestoreContext from "../states/FirestoreContext";
 import ItemList from "../components/ItemList";
@@ -42,9 +44,9 @@ const NotesInput = styled(Input)`
   margin-top: 30px;
 `;
 
-const getTotal = (items) => {
+const getTotal = (items, discount) => {
   return Object.values(items)
-    .reduce((acc, { price, quantity }) => acc + price * quantity, 0)
+    .reduce((acc, { price, quantity }) => acc + price * quantity, -discount)
     .toFixed(2);
 };
 
@@ -55,7 +57,9 @@ const TakeOrderScreen = () => {
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const totalAmount = getTotal(items);
+  const quantity = getTotalQuantity(Object.values(items));
+  const discount = Math.floor(quantity / 2) * DISCOUNT;
+  const totalAmount = getTotal(items, discount);
 
   const toggle = () => setOpenModal(!openModal);
 
@@ -121,6 +125,7 @@ const TakeOrderScreen = () => {
       />
       <ItemsPricing
         change={change}
+        discount={discount.toFixed(2)}
         customerAmount={customerAmount}
         setCustomerAmount={setCustomerAmount}
         total={totalAmount}

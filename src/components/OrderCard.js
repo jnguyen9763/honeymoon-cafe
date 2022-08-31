@@ -81,11 +81,6 @@ const OrderCard = ({ order }) => {
   const onProgressOrder = async () => {
     try {
       switch (status) {
-        case STATUSES.NEW:
-          await updateOrderProperties(orderNumber, {
-            status: STATUSES.IN_PROGRESS,
-          });
-          return;
         case STATUSES.IN_PROGRESS:
           await updateOrderProperties(orderNumber, {
             status: STATUSES.COMPLETED,
@@ -109,11 +104,6 @@ const OrderCard = ({ order }) => {
   const onUndoProgress = async () => {
     try {
       switch (status) {
-        case STATUSES.IN_PROGRESS:
-          await updateOrderProperties(orderNumber, {
-            status: STATUSES.NEW,
-          });
-          return;
         case STATUSES.COMPLETED:
           await updateOrderProperties(orderNumber, {
             status: STATUSES.IN_PROGRESS,
@@ -163,7 +153,7 @@ const OrderCard = ({ order }) => {
             {status !== STATUSES.CANCELED && (
               <div>
                 <StatusButton status={status} onClick={onProgressOrder} />
-                {status !== STATUSES.NEW && (
+                {status !== STATUSES.IN_PROGRESS && (
                   <UndoButton size="sm" block onClick={onUndoProgress}>
                     Undo
                   </UndoButton>

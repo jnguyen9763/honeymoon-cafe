@@ -1,7 +1,6 @@
 import { PAYMENT_METHODS } from "../constants/paymentMethods";
-import { STATUSES } from "../constants/statuses";
 
-const ALL_DRINKS = ["Lavender Moon", "Pink Moon", "Blue Moon"];
+const ALL_DRINKS = ["Gold Moon", "Pink Moon", "Blue Moon"];
 const ALL_FOODS = ["Moonettes"];
 
 const getItemCount = (items, { itemName }) => {
@@ -51,8 +50,12 @@ export const getItemsCount = (orders, getItemsCountFunc, options) => {
   );
 };
 
+export const getTotalQuantity = (items) => {
+  return items.reduce((acc, { quantity }) => acc + parseInt(quantity), 0);
+};
+
 // TODO: clean this up and update
-export const getPieChartDatas = (allOrders, processedOrders) => {
+export const getPieChartDatas = (processedOrders) => {
   const paymentMethodData = [
     {
       title: "Cash",
@@ -72,54 +75,11 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
     },
   ];
 
-  const statusData = [
-    {
-      title: "New",
-      value: getPieChartValue(
-        allOrders,
-        (order) => order.status === STATUSES.NEW
-      ),
-      color: "#5DADE2",
-    },
-    {
-      title: "In Progress",
-      value: getPieChartValue(
-        allOrders,
-        (order) => order.status === STATUSES.IN_PROGRESS
-      ),
-      color: "#F4D03F",
-    },
-    {
-      title: "Completed",
-      value: getPieChartValue(
-        allOrders,
-        (order) => order.status === STATUSES.COMPLETED
-      ),
-      color: "#52BE80",
-    },
-    {
-      title: "Picked-up",
-      value: getPieChartValue(
-        allOrders,
-        (order) => order.status === STATUSES.PICKED_UP
-      ),
-      color: "#CACFD2",
-    },
-    {
-      title: "Canceled",
-      value: getPieChartValue(
-        allOrders,
-        (order) => order.status === STATUSES.CANCELED
-      ),
-      color: "#EC7063",
-    },
-  ];
-
   const itemsData = [
     {
-      title: "Lavender Moon",
+      title: "Gold Moon",
       value: getItemsCount(processedOrders, getItemCount, {
-        itemName: "Lavender Moon",
+        itemName: "Gold Moon",
       }),
       color: "#E74C3C",
     },
@@ -200,7 +160,6 @@ export const getPieChartDatas = (allOrders, processedOrders) => {
 
   return [
     { header: "Payment Method", data: paymentMethodData },
-    { header: "Status", data: statusData },
     { header: "Items", data: itemsData },
     { header: "Drink Toppings", data: drinkToppingsData },
     { header: "Food Toppings", data: foodToppingsData },
