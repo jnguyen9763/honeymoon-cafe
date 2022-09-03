@@ -126,10 +126,10 @@ export const getPieChartDatas = (processedOrders) => {
 
   const foodToppingsData = [
     {
-      title: "Cookies and Creme",
+      title: "Cocoa Pebbles",
       value: getItemsCount(processedOrders, getToppingCount, {
         itemNames: ALL_FOODS,
-        toppingName: "cookies and creme",
+        toppingName: "cocoa pebbles",
       }),
       color: "#2ECC71",
     },

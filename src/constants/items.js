@@ -8,7 +8,7 @@ const DRINK_TOPPINGS = Object.freeze({
 const FOOD_TOPPINGS = Object.freeze({
   TOPPING_ONE: {
     key: "TOPPING_ONE",
-    name: "Cookies and Creme",
+    name: "Cocoa Pebbles",
     selected: false,
   },
   TOPPING_TWO: { key: "TOPPING_TWO", name: "Graham Crackers", selected: false },
