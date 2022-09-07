@@ -47,7 +47,10 @@ const ItemMaker = ({ onUpdateItem }) => {
   const onToppingSelected = (toppingKey) => {
     const resetToppingsSelected = Object.keys(
       selectedToppings[selectedItemKey]
-    ).reduce((acc, topping) => ({ ...acc, [topping]: { selected: false } }));
+    ).reduce(
+      (acc, topping) => ({ ...acc, [topping]: { selected: false } }),
+      {}
+    );
 
     setSelectedToppings({
       ...selectedToppings,
